@@ -1,5 +1,5 @@
 
-total = int(input("cuantos primos muestro? "))
+total = int(input("cuantos primos gemelos muestro? "))
 N = 2
 cuantos = 0
 
