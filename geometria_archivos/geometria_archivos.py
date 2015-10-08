@@ -59,7 +59,6 @@ class cuadrado:
         # retorna un string que corresponde a la codificacion del circulo
         return " ".join(['cuadrado',str(self.x),str(self.y),str(self.lado)])
 
-
 class circulo:
     def __init__(self,x,y,radio):
         self.x=x
@@ -138,6 +137,36 @@ class lienzo:
             self.agregar(objeto)
         f.close()
 
+    def modificar_objeto(self,objeto):
+        getch=Getch()
+        D=10
+        up = vector(0,-D)
+        down = vector(0,D)
+        left = vector(-D,0)
+        right = vector(D,0)
+        print("'a': agrandar, 'z': achicar, flechas para mover y 'f' para salir")
+        c=''
+        while c!='f':
+            c=getch()
+            if c == 'a':
+                objeto.escalar(1.05)
+            elif c == 'z':
+                objeto.escalar(1/1.05)
+            elif ord(c) == 27:
+                c1=getch()
+                c=getch()
+                if ord(c1)==91:
+                    desplazamiento=vector(0,0)
+                    if ord(c) == 68:
+                        desplazamiento=left
+                    elif ord(c) == 67:
+                        desplazamiento=right
+                    elif ord(c) == 65:
+                        desplazamiento=up
+                    elif ord(c) == 66:
+                        desplazamiento=down
+                    objeto.desplazar(desplazamiento)
+            self.dibujar()
 
 
 def pregunta_opcion():
@@ -155,37 +184,6 @@ def pregunta_opcion():
         if opt in opciones_legales:
             return opt
 
-def modificar_objeto(canvas):
-    objeto=canvas.seleccionar_objeto()
-    getch=Getch()
-
-    D=10
-    up = vector(0,-D)
-    down = vector(0,D)
-    left = vector(-D,0)
-    right = vector(D,0)
-    c=''
-    while c!='f':
-        c=getch()
-        if c == 'a':
-            objeto.escalar(1.05)
-        elif c == 'z':
-            objeto.escalar(1/1.05)
-        elif ord(c) == 27:
-            c1=getch()
-            c=getch()
-            if ord(c1)==91:
-                desplazamiento=vector(0,0)
-                if ord(c) == 68:
-                    desplazamiento=left
-                elif ord(c) == 67:
-                    desplazamiento=right
-                elif ord(c) == 65:
-                    desplazamiento=up
-                elif ord(c) == 66:
-                    desplazamiento=down
-                objeto.desplazar(desplazamiento)
-        canvas.dibujar()
 
 def pregunta_circulo():
     ## pregunta por un circulo, lo crea y lo retorna
@@ -203,7 +201,6 @@ def pregunta_cuadrado():
     ## pregunta por un cuadrado y lo crea
     while True:
         linea=input("Ingresa [lado] [pos_x] [pos_y]: ")
-        #falta implementar
         l = linea.split()
         if len(l) == 3 and l[0].isnumeric() and l[1].isnumeric() and l[2].isnumeric():
             break
@@ -231,7 +228,8 @@ while opcion != '6':
         canvas.agregar(cuad)
         canvas.dibujar()
     elif opcion == '3':
-        modificar_objeto(canvas)
+        objeto=canvas.seleccionar_objeto()
+        canvas.modificar_objeto(objeto)
     elif opcion == '4':
         print("Guardar")
         fname = get_nombre_archivo()
